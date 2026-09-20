@@ -1,0 +1,114 @@
+### ---------------------------------------------------------------------------
+### DES104 - Desafío práctico 2
+### Pruebas para el cliente HTTP de Visual Studio 2022.
+### Ejecute primero el login: el cliente conserva la cookie de sesión.
+### ---------------------------------------------------------------------------
+
+@gateway = http://localhost:5000
+
+### 1. Login en el API Gateway
+POST {{gateway}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@udb.edu.sv",
+  "password": "Desafio2026*"
+}
+
+### 2. Verificar la sesión
+GET {{gateway}}/auth/me
+
+### 3. Listar todos los clientes
+GET {{gateway}}/clientes
+
+### 4. Obtener un cliente por ID
+GET {{gateway}}/clientes/1
+
+### 5. Crear un cliente
+POST {{gateway}}/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Mario",
+  "apellido": "Meléndez",
+  "email": "mario.prueba@udb.edu.sv",
+  "telefono": "71234567",
+  "dui": "01234567-8",
+  "direccion": "Colonia Escalón #123, San Salvador",
+  "activo": true
+}
+
+### 6. Actualizar el cliente creado
+PUT {{gateway}}/clientes/1501
+Content-Type: application/json
+
+{
+  "nombre": "Mario",
+  "apellido": "Meléndez",
+  "email": "mario.prueba@udb.edu.sv",
+  "telefono": "71234567",
+  "dui": "01234567-8",
+  "direccion": "Nueva dirección #456, Santa Tecla",
+  "activo": true
+}
+
+### 7. Eliminar el cliente creado
+DELETE {{gateway}}/clientes/1501
+
+### 8. Validación: datos inválidos (400 con formato estándar)
+POST {{gateway}}/clientes
+Content-Type: application/json
+
+{
+  "nombre": "A",
+  "apellido": "",
+  "email": "no-es-correo",
+  "telefono": "123",
+  "dui": "8888"
+}
+
+### 9. Pedidos CON caché: primera llamada (lenta)
+GET {{gateway}}/pedidos
+
+### 10. Pedidos CON caché: segunda llamada (rápida, servida desde la caché)
+GET {{gateway}}/pedidos
+
+### 11. Pedidos SIN caché: la misma consulta, para comparar tiempos
+GET {{gateway}}/pedidos-sin-cache
+
+### 12. Detalle de un pedido (incluye los datos del cliente)
+GET {{gateway}}/pedidos/1
+
+### 13. Pedidos de un cliente específico
+GET {{gateway}}/pedidos/cliente/25
+
+### 14. Crear un pedido
+POST {{gateway}}/pedidos
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "descripcion": "Monitor 24 pulgadas",
+  "cantidad": 2,
+  "total": 450.50
+}
+
+### 15. Validación: el cliente no existe (422)
+POST {{gateway}}/pedidos
+Content-Type: application/json
+
+{
+  "clienteId": 999999,
+  "descripcion": "Pedido huérfano",
+  "cantidad": 1,
+  "total": 10.00
+}
+
+### 16. Ruta no configurada en el Gateway (404 estandarizado)
+GET {{gateway}}/facturas
+
+### 17. Cerrar sesión
+POST {{gateway}}/auth/logout
+
+### 18. Sin sesión: el Gateway responde 401 estandarizado
+GET {{gateway}}/pedidos

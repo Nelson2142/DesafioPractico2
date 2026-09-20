@@ -1,0 +1,535 @@
+{
+  "info": {
+    "name": "DES104 - Desafio Practico 2 (API Gateway)",
+    "description": "Colección completa del sistema distribuido: autenticación en el Gateway, CRUD de clientes, pedidos, pruebas de caché y validaciones. El Gateway devuelve la cookie de sesión; Postman y Bruno la reenvían automáticamente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway",
+      "value": "http://localhost:5000"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Autenticacion",
+      "item": [
+        {
+          "name": "Login (obtiene la cookie de sesion)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/auth/login",
+              "host": [
+                "{{gateway}}/auth/login"
+              ]
+            },
+            "description": "Ejecutar SIEMPRE primero. Devuelve la cookie que el Gateway valida en cada ruta.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@udb.edu.sv\",\n  \"password\": \"Desafio2026*\",\n  \"recordarme\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sesion actual",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/auth/me",
+              "host": [
+                "{{gateway}}/auth/me"
+              ]
+            },
+            "description": "Confirma que la sesión está activa."
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar usuario nuevo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/auth/register",
+              "host": [
+                "{{gateway}}/auth/register"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"estudiante@udb.edu.sv\",\n  \"password\": \"Estudiante2026*\",\n  \"nombreCompleto\": \"Estudiante DES104\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/auth/logout",
+              "host": [
+                "{{gateway}}/auth/logout"
+              ]
+            },
+            "description": "Cierra la sesión. Útil para demostrar el error 401 estandarizado."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01 - Clientes (por el Gateway)",
+      "item": [
+        {
+          "name": "Listar todos los clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/clientes",
+              "host": [
+                "{{gateway}}/clientes"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Listar con busqueda y paginacion",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/clientes?buscar=Melendez&pagina=1&tamanoPagina=10",
+              "host": [
+                "{{gateway}}/clientes?buscar=Melendez&pagina=1&tamanoPagina=10"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/clientes/1",
+              "host": [
+                "{{gateway}}/clientes/1"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/clientes",
+              "host": [
+                "{{gateway}}/clientes"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Mario\",\n  \"apellido\": \"Melendez\",\n  \"email\": \"mario.prueba@udb.edu.sv\",\n  \"telefono\": \"71234567\",\n  \"dui\": \"01234567-8\",\n  \"direccion\": \"Colonia Escalon #123, San Salvador\",\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/clientes/1",
+              "host": [
+                "{{gateway}}/clientes/1"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Mario\",\n  \"apellido\": \"Melendez\",\n  \"email\": \"mario.prueba@udb.edu.sv\",\n  \"telefono\": \"71234567\",\n  \"dui\": \"01234567-8\",\n  \"direccion\": \"Nueva direccion #456, Santa Tecla\",\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/clientes/1501",
+              "host": [
+                "{{gateway}}/clientes/1501"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "VALIDACION: datos invalidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/clientes",
+              "host": [
+                "{{gateway}}/clientes"
+              ]
+            },
+            "description": "Demuestra las validaciones de integridad con el formato de respuesta estándar.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"A\",\n  \"apellido\": \"\",\n  \"email\": \"no-es-correo\",\n  \"telefono\": \"123\",\n  \"dui\": \"8888\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VALIDACION: correo duplicado (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/clientes",
+              "host": [
+                "{{gateway}}/clientes"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Copia\",\n  \"apellido\": \"Duplicada\",\n  \"email\": \"mario.prueba@udb.edu.sv\",\n  \"telefono\": \"71234567\",\n  \"dui\": \"11111111-1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Pedidos (por el Gateway)",
+      "item": [
+        {
+          "name": "Listar todos los pedidos (CON cache)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/pedidos",
+              "host": [
+                "{{gateway}}/pedidos"
+              ]
+            },
+            "description": "Primera llamada = MISS, siguientes = HIT (ver encabezado X-Cache)."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todos los pedidos (SIN cache)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/pedidos-sin-cache",
+              "host": [
+                "{{gateway}}/pedidos-sin-cache"
+              ]
+            },
+            "description": "Misma consulta sin CacheOptions: sirve como línea base de comparación."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/pedidos/1",
+              "host": [
+                "{{gateway}}/pedidos/1"
+              ]
+            },
+            "description": "El detalle incluye los datos del cliente obtenidos de la API de Clientes."
+          },
+          "response": []
+        },
+        {
+          "name": "Pedidos de un cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/pedidos/cliente/25",
+              "host": [
+                "{{gateway}}/pedidos/cliente/25"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Filtrar por estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/pedidos?estado=Entregado",
+              "host": [
+                "{{gateway}}/pedidos?estado=Entregado"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/pedidos",
+              "host": [
+                "{{gateway}}/pedidos"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 1,\n  \"descripcion\": \"Monitor 24 pulgadas\",\n  \"cantidad\": 2,\n  \"total\": 450.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/pedidos/1",
+              "host": [
+                "{{gateway}}/pedidos/1"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Monitor 27 pulgadas\",\n  \"cantidad\": 3,\n  \"total\": 720.0,\n  \"estado\": \"Enviado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VALIDACION: cliente inexistente (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/pedidos",
+              "host": [
+                "{{gateway}}/pedidos"
+              ]
+            },
+            "description": "La API de Pedidos consulta a la API de Clientes antes de guardar.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 999999,\n  \"descripcion\": \"Pedido huerfano\",\n  \"cantidad\": 1,\n  \"total\": 10.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VALIDACION: datos inconsistentes (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/pedidos",
+              "host": [
+                "{{gateway}}/pedidos"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 1,\n  \"descripcion\": \"X\",\n  \"cantidad\": 0,\n  \"total\": -5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Seguridad y errores",
+      "item": [
+        {
+          "name": "Ruta inexistente en el Gateway (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/facturas",
+              "host": [
+                "{{gateway}}/facturas"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Salud del Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/health",
+              "host": [
+                "{{gateway}}/health"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Rate limit: repetir 21 veces en un minuto (429)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/clientes/5",
+              "host": [
+                "{{gateway}}/clientes/5"
+              ]
+            },
+            "description": "La ruta GET /clientes/{id} permite 20 solicitudes por minuto."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "Routes": [
+    {
+      "Key": "ClientesLista",
+      "UpstreamPathTemplate": "/clientes",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/clientes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "ClientesPorId",
+      "UpstreamPathTemplate": "/clientes/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/clientes/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "ClientesCrear",
+      "UpstreamPathTemplate": "/clientes",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/clientes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "ClientesActualizar",
+      "UpstreamPathTemplate": "/clientes/{id}",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamPathTemplate": "/api/clientes/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "ClientesEliminar",
+      "UpstreamPathTemplate": "/clientes/{id}",
+      "UpstreamHttpMethod": [ "Delete" ],
+      "DownstreamPathTemplate": "/api/clientes/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+
+    {
+      "Key": "PedidosListaConCache",
+      "UpstreamPathTemplate": "/pedidos",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/pedidos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      },
+      "CacheOptions": {
+        "TtlSeconds": 30,
+        "Region": "pedidos",
+        "EnableContentHashing": false
+      }
+    },
+    {
+      "Key": "PedidosListaSinCache",
+      "UpstreamPathTemplate": "/pedidos-sin-cache",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/pedidos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "PedidosPorCliente",
+      "UpstreamPathTemplate": "/pedidos/cliente/{clienteId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/pedidos/cliente/{clienteId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      },
+      "CacheOptions": {
+        "TtlSeconds": 30,
+        "Region": "pedidos",
+        "EnableContentHashing": false
+      }
+    },
+    {
+      "Key": "PedidosPorId",
+      "UpstreamPathTemplate": "/pedidos/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/pedidos/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      },
+      "CacheOptions": {
+        "TtlSeconds": 30,
+        "Region": "pedidos",
+        "EnableContentHashing": false
+      }
+    },
+    {
+      "Key": "PedidosCrear",
+      "UpstreamPathTemplate": "/pedidos",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/pedidos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    },
+    {
+      "Key": "PedidosActualizar",
+      "UpstreamPathTemplate": "/pedidos/{id}",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamPathTemplate": "/api/pedidos/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Identity.Application" ]
+      }
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000",
+    "RequestIdKey": "X-Correlation-Id",
+    "HttpHandlerOptions": {
+      "AllowAutoRedirect": false,
+      "UseCookieContainer": false,
+      "UseTracing": false,
+      "MaxConnectionsPerServer": 200
+    }
+  }
+}
