@@ -142,7 +142,7 @@ verse de inmediato.
 
 ## Siembra de datos
 
-Los datos de prueba se generan con un ciclo `for` dentro de cada API:
+Los datos de prueba se generan con un ciclo `for`(logica robada a mi amigo Payin) dentro de cada API:
 
 - `src/ClientesAPI/Data/SembradorClientes.cs` → 1,500 clientes
 - `src/PedidosAPI/Data/SembradorPedidos.cs` → 1,500 pedidos repartidos entre esos clientes
@@ -154,28 +154,7 @@ para que ningún pedido quede apuntando a un cliente inexistente.
 
 Para volver a sembrar: borre las filas o la base de datos y vuelva a arrancar.
 
-## Pruebas de rendimiento
 
-No hace falta ninguna herramienta extra: Postman muestra el tiempo de cada
-solicitud junto al código de respuesta, y la consola del Gateway registra los
-milisegundos de cada una.
-
-1. Ejecute `GET /pedidos-sin-cache` cinco veces y anote los tiempos.
-2. Ejecute `GET /pedidos` cinco veces seguidas. La primera será lenta (la caché
-   está vacía) y las siguientes mucho más rápidas.
-3. Espere 30 segundos y repita `GET /pedidos`: vuelve a ser lenta porque expiró
-   el TTL, lo que confirma que la caché funciona.
-
-Llene esta tabla con sus resultados para el informe:
-
-| Solicitud | Sin caché (ms) | Con caché (ms) |
-|---|---|---|
-| 1ª | | |
-| 2ª | | |
-| 3ª | | |
-| 4ª | | |
-| 5ª | | |
-| Promedio | | |
 
 ## Estructura
 
@@ -188,15 +167,3 @@ DesafioPractico2/
 │   └── PedidosAPI/      Pedidos + comunicación con ClientesAPI + sembrador
 └── tests/               Colección de Postman y archivo .http
 ```
-
-## Problemas comunes
-
-| Síntoma | Solución |
-|---|---|
-| 502 al llamar /clientes o /pedidos | Alguna API interna no está corriendo. Verifique que los tres proyectos estén iniciados. |
-| 401 después de iniciar sesión | Postman no está reenviando la cookie. Revise que las cookies estén habilitadas para localhost y que no haya llamado a /auth/logout. |
-| No resuelve el paquete Ocelot.Cache.CacheManager | Abra *Administrar paquetes NuGet* en el proyecto ApiGateway, busque `Ocelot.Cache.CacheManager` e instale la versión más reciente compatible con Ocelot 25. |
-| Error de conexión a SQL Server | Revise la cadena de conexión y que LocalDB exista (`sqllocaldb info mssqllocaldb`). |
-| Update-Database dice que la tabla ya existe | La base se creó sola en un arranque previo. Ejecute `Drop-Database` en ese proyecto y repita `Update-Database`. |
-| La siembra no corre | Solo corre con la tabla vacía. Borre las filas o la base de datos. |
-| 429 en /clientes/{id} | Es el límite de 20 solicitudes por minuto de esa ruta. Se ajusta en `ocelot.json`. |
